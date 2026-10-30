@@ -1,0 +1,92 @@
+---
+title: "Temperature exploration"
+author: "Claudius"
+# One source, three output formats. Render all with: quarto render quarto_test.qmd
+format:
+  html:
+    toc: true
+  docx:
+    toc: true
+    reference-doc: WordTemplate.docx  # fonts and styles are taken from this file
+  pdf:
+    toc: true                         # PDF needs LaTeX: quarto install tinytex
+# Defaults for all code chunks: show only the results, not code or messages.
+execute:
+  warning: false
+  message: false
+  echo: false
+number-sections: true                 # numbered headings, so "Section 2" can be found
+bibliography: references.bib
+# csl: apa.csl                        # uncomment for APA citations (see README)
+---
+
+```{r}
+#| label: setup
+here::i_am("text/quarto_test.qmd")
+library(here)
+library(tidyverse)
+library(flextable)
+
+# Quarto runs the code from the folder of this document (text/), so the
+# relative path "data/raw/airquality.csv" would not be found. here() starts
+# from the project root instead.
+air_data <- read_csv(file = here("data/raw/airquality.csv")) |>
+  filter(Month > 5)
+```
+
+# Introduction {#sec-intro}
+
+This document is meant as an *illustration*.
+The data are described in @sec-data, their visualisation in @sec-vis.
+
+# Data {#sec-data}
+
+These are **data**!
+
+Here we use data from @chambers1983.
+An overview is given in @tbl-data.
+
+<!-- The label prefix tbl- makes the table cross-referenceable. -->
+
+```{r}
+#| label: tbl-data
+#| cap-location: top
+#| tbl-cap: "Overview of the data."
+head(air_data) |>
+  flextable() |>
+  autofit() |>
+  theme_vanilla()
+```
+
+The data have been collected [@chambers1983].
+
+<!-- Hard-coded: wrong as soon as the data change. Inline code is computed at
+     every render. -->
+
+The average temperature is 77.88.
+Better: `r round(mean(air_data$Temp), 2)`.
+
+A visualisation is shown in @fig-airplot.
+
+```{r}
+#| label: fig-airplot
+#| fig-cap: "The temperature across months."
+air_data_plot <- ggplot(
+  data = air_data,
+  mapping = aes(x = Day, y = Temp, color = as_factor(Month))) +
+  geom_point() +
+  geom_line() +
+  scale_color_viridis_d() +
+  theme_minimal()
+air_data_plot
+```
+
+## Data import {#sec-import}
+
+## Visualisation {#sec-vis}
+
+# Conclusion {#sec-conclusion}
+
+As shown in @sec-intro, ...
+
+# References {.unnumbered}

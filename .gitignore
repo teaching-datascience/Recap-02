@@ -1,0 +1,18 @@
+.Rproj.user/
+.Rhistory
+.RData
+.DS_Store
+.quarto
+
+# Rendered output: produced by quarto render, not part of the source
+*.html
+*_files/
+*.pdf
+*.tex
+*.log
+text/quarto_test.docx
+
+# Lock files Word creates while a document is open
+~$*
+.Rproj.user
+.httr-oauth
